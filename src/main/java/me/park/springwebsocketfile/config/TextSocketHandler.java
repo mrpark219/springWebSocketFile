@@ -27,11 +27,21 @@ public class TextSocketHandler extends TextWebSocketHandler {
 		String textMessagePayload = textMessage.getPayload();
 		String nickname = String.valueOf(webSocketSession.getAttributes().get("nickname"));
 
-		Message message = Message.builder().type(MessageTypeEnum.MESSAGE_SELF).message(textMessagePayload).nickname(nickname).time(LocalDateTime.now()).build();
-		sendSelf(webSocketSession, message);
+		if(textMessagePayload.startsWith("FILE_UPLOAD")) {
+			String path = textMessagePayload.replace("FILE_UPLOAD", "");
+			Message message = Message.builder().type(MessageTypeEnum.MESSAGE_FILE_SELF).message(path).nickname(nickname).time(LocalDateTime.now()).build();
+			sendSelf(webSocketSession, message);
 
-		message.setType(MessageTypeEnum.MESSAGE);
-		sendAllExceptSelf(webSocketSession, message);
+			message.setType(MessageTypeEnum.MESSAGE_FILE);
+			sendAllExceptSelf(webSocketSession, message);
+		}
+		else {
+			Message message = Message.builder().type(MessageTypeEnum.MESSAGE_SELF).message(textMessagePayload).nickname(nickname).time(LocalDateTime.now()).build();
+			sendSelf(webSocketSession, message);
+
+			message.setType(MessageTypeEnum.MESSAGE);
+			sendAllExceptSelf(webSocketSession, message);
+		}
 	}
 
 	@Override

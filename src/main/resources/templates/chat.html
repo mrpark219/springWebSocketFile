@@ -22,7 +22,6 @@
             getNotificationPermission();
 
             $('#message').bind('keyup input', (event) => {
-
                 if (event.key === 'Enter') {
                     if (!event.shiftKey) {
                         fnSend();
@@ -35,8 +34,16 @@
                 else {
                     $('#sendButton').attr('disabled', true);
                 }
-
             });
+
+            $(document).on('change', '#fileInput', function () {
+                if ($('#fileInput').val()) {
+                    $('#fileSendButton').attr('disabled', false);
+                }
+                else {
+                    $('#fileSendButton').attr('disabled', true);
+                }
+            })
         });
 
         function openSocket() {
@@ -96,6 +103,25 @@
             $('#message').val('');
         }
 
+        function fnSendFile() {
+            let formData = new FormData();
+            formData.append("file", $('#fileInput')[0].files[0]);
+
+            $.ajax({
+                type: "POST",
+                url: "/api/file/upload",
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function (response) {
+                    ws.send("FILE_UPLOAD" + response);
+                },
+                error: function (response) {
+                    alert('파일 업로드 과정에서 오류가 발생했습니다.');
+                }
+            });
+        }
+
         //서버로부터 받은 내용 출력
         function printResponse(data) {
 
@@ -119,6 +145,28 @@
                     "<span class=\"name\">" + object.nickname + "</span>" +
                     "<div>" +
                     "<p>" + object.message + "</p>" +
+                    "</div>" +
+                    "<span class=\"time\">" + object.time + "</span>" +
+                    "</li>";
+            }
+            else if (object.type === 'MESSAGE_FILE_SELF') {
+                let path = Base64Encode(object.message);
+                type = 'right';
+                li += "<li class=\"" + type + "\">" +
+                    "<span class=\"name\">" + object.nickname + "</span>" +
+                    "<span class=\"time\">" + object.time + "</span>" +
+                    "<div>" +
+                    "<p><a href=/api/file/download?path=" + path + ">" + object.message.split("\\").pop() + "</p>" +
+                    "</div>" +
+                    "</li>";
+            }
+            else if (object.type === 'MESSAGE_FILE') {
+                let path = Base64Encode(object.message);
+                type = 'left';
+                li += "<li class=\"" + type + "\">" +
+                    "<span class=\"name\">" + object.nickname + "</span>" +
+                    "<div>" +
+                    "<p><a href=/api/file/download?path=" + path + ">" + object.message.split("\\").pop() + "</p>" +
                     "</div>" +
                     "<span class=\"time\">" + object.time + "</span>" +
                     "</li>";
@@ -176,6 +224,66 @@
                 notification.close();
             }, 1500);
         }
+
+        function Base64Encode(input) {
+            let keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+            let output = "";
+            let chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+            let i = 0;
+
+            input = _utf8_encode(input);
+
+            while (i < input.length) {
+
+                chr1 = input.charCodeAt(i++);
+                chr2 = input.charCodeAt(i++);
+                chr3 = input.charCodeAt(i++);
+
+                enc1 = chr1 >> 2;
+                enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+                enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+                enc4 = chr3 & 63;
+
+                if (isNaN(chr2)) {
+                    enc3 = enc4 = 64;
+                }
+                else if (isNaN(chr3)) {
+                    enc4 = 64;
+                }
+
+                output = output +
+                    keyStr.charAt(enc1) + keyStr.charAt(enc2) +
+                    keyStr.charAt(enc3) + keyStr.charAt(enc4);
+
+            }
+            return output;
+        }
+
+        function _utf8_encode(string) {
+            string = string.replace(/\r\n/g,"\n");
+            let utftext = "";
+
+            for (var n = 0; n < string.length; n++) {
+
+                var c = string.charCodeAt(n);
+
+                if (c < 128) {
+                    utftext += String.fromCharCode(c);
+                }
+                else if((c > 127) && (c < 2048)) {
+                    utftext += String.fromCharCode((c >> 6) | 192);
+                    utftext += String.fromCharCode((c & 63) | 128);
+                }
+                else {
+                    utftext += String.fromCharCode((c >> 12) | 224);
+                    utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+                    utftext += String.fromCharCode((c & 63) | 128);
+                }
+
+            }
+
+            return utftext;
+        }
     </script>
 </head>
 <body>
@@ -185,6 +293,10 @@
         <button onclick="closeSocket();">채팅방 나가기</button>
     </div>
     <div class="chatBox" id="chatContainer"></div>
+    <div class="writeFile">
+        <input type="file" id="fileInput">
+        <button id="fileSendButton" onclick="fnSendFile();" disabled>전송</button>
+    </div>
     <div class="write">
         <textarea id="message" cols="30" rows="10"></textarea>
         <button id="sendButton" onclick="fnSend();" disabled>전송</button>

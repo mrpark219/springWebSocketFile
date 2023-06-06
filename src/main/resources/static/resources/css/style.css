@@ -73,7 +73,7 @@
 }
 
 .chatBox {
-    height: calc(100vh - 200px);
+    height: calc(100vh - 300px);
     overflow: auto;
     padding: 20px 0;
 }
@@ -98,6 +98,10 @@
 .chatUl li > div > p {
     word-break: break-all;
     text-align: left;
+}
+
+.chatUl li > div > p > a {
+    color: blue;
 }
 
 .chatUl li > span.name {
@@ -139,7 +143,7 @@
 
 .write {
     position: relative;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .write textarea {
@@ -160,6 +164,33 @@
 }
 
 .write button:disabled {
+    background-color: rgba(65, 120, 74, 0.3);
+}
+
+.writeFile {
+    position: relative;
+    margin-top: 20px;
+}
+
+.writeFile input {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #e4e4e4;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.writeFile button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 7px 15px;
+    background-color: #41784a;
+    border-radius: 10px;
+    color: #fff;
+}
+
+.writeFile button:disabled {
     background-color: rgba(65, 120, 74, 0.3);
 }
 
