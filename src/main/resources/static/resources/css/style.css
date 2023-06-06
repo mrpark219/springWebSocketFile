@@ -1,0 +1,212 @@
+@import url('common.css');
+
+.loader {
+    border: 16px solid #f3f3f3;
+    border-top: 16px solid #75cbc6;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+.container {
+    width: 990px;
+    margin: 0 auto;
+    height: inherit;
+}
+
+.loginDivWrap {
+    position: relative;
+    border: 1px solid #222;
+    width: 800px;
+    height: 400px;
+    margin-top: -200px;
+    top: 50%;
+}
+
+.loginDiv {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 400px;
+    height: 160px;
+    margin-left: -200px;
+    margin-top: -80px;
+}
+
+.loginDiv input {
+    width: 100%;
+}
+
+.loginDiv button {
+    background-color: #222;
+    border: 1px solid #222;
+    font-size: 11px;
+    padding: 15px;
+    margin-top: 5px;
+    width: 100%;
+    color: #fff;
+}
+
+.exit {
+    margin: 10px 0;
+}
+
+.exit button {
+    padding: 7px 15px;
+    background-color: #cf2828;
+    border-radius: 10px;
+    color: #fff;
+}
+
+.chatBox {
+    height: calc(100vh - 200px);
+    overflow: auto;
+    padding: 20px 0;
+}
+
+.chatUl {
+    overflow: hidden;
+}
+
+.chatUl li {
+    width: 60%;
+    margin-top: 10px;
+}
+
+.chatUl li > div {
+    border: 1px solid #e4e4e4;
+    padding: 15px;
+    display: inline-block;
+    border-radius: 10px;
+    max-width: calc(100% - 40px);
+}
+
+.chatUl li > div > p {
+    word-break: break-all;
+    text-align: left;
+}
+
+.chatUl li > span.name {
+    display: block;
+    margin-bottom: 2px;
+}
+
+.chatUl li > span.time {
+    display: inline-block;
+    vertical-align: bottom;
+    font-size: 14px;
+    color: #8f8d8d;
+    margin: 0 3px;
+}
+
+.chatUl li.left {
+    float: left;
+}
+
+.chatUl li.right {
+    float: right;
+    text-align: right;
+}
+
+.chatUl::after,
+.chatUl li::after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+.notify {
+    margin: 30px 0;
+    text-align: center;
+    background: #e6e6e691;
+    padding: 10px 0;
+    border-radius: 10px;
+}
+
+.write {
+    position: relative;
+    margin-top: 20px;
+}
+
+.write textarea {
+    width: 100%;
+    border: 1px solid #e4e4e4;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.write button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 7px 15px;
+    background-color: #41784a;
+    border-radius: 10px;
+    color: #fff;
+}
+
+.write button:disabled {
+    background-color: rgba(65, 120, 74, 0.3);
+}
+
+@media screen and (max-width: 1024px) {
+    .container {
+        width: 100%;
+        padding: 20px;
+    }
+}
+
+@media screen and (max-width: 840px) {
+    .loginDivWrap {
+        width: 90%;
+        margin: 0 auto;
+        top: 20%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .loginDiv {
+        width: 100%;
+        left: auto;
+        margin-left: auto;
+        position: static;
+        margin-top: 0;
+        height: auto;
+    }
+
+    .loginDivWrap {
+        padding: 50px;
+    }
+
+    .container.loginDivWrap {
+        height: auto;
+    }
+
+    .chatUl li {
+        width: 65%;
+    }
+}
+
+@media screen and (max-width: 425px) {
+    .loginDivWrap {
+        padding: 40px 20px;
+    }
+
+    .chatUl li {
+        width: 70%;
+    }
+}

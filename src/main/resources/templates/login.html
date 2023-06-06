@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width"/>
+    <link rel="stylesheet" th:href="@{/resources/css/style.css}"/>
+    <title>로그인</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function validator() {
+            if ($('#nickname').val() === '') {
+                alert('닉네임을 입력하세요.');
+                return false;
+            }
+        }
+
+        function login() {
+            let nickname = $('#nickname').val();
+
+            if (nickname === '') {
+                alert('닉네임을 입력하세요.');
+                return false;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/api/login",
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({nickname: nickname}),
+                success: function (response) {
+                    location.href = "/chat";
+                },
+                error: function (response) {
+                    console.log(response);
+                    alert(response);
+                }
+            });
+        }
+
+    </script>
+</head>
+<body>
+<div class="container loginDivWrap">
+    <div class="loginDiv">
+        <p>로그인 페이지 입니다.</p>
+        <input type="text" name="nickname" id="nickname" placeholder="닉네임을 입력하세요."/>
+        <button onclick="login();">채팅 시작하기</button>
+    </div>
+</div>
+</body>
+</html>
