@@ -188,7 +188,9 @@
                 }
                 lastUlFlag = true;
 
-                doNotify(object.sender, String(object.message).substring(0, 20));
+                if(object.type !== 'MESSAGE_FILE_SELF' && object.type !== 'MESSAGE_SELF') {
+                    doNotify(object.nickname, String(object.message).substring(0, 20));
+                }
             }
 
             //자동 스크롤
